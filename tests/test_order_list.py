@@ -1,11 +1,11 @@
 import allure
-from services.register_new_courier import *
-from urls import Urls
+from endpoints.order_endpoints import OrderAPI
 
 
 class TestOrderList:
-    @allure.title(' Проверяем, что в тело ответа возвращается список заказов.')
+    @allure.title('Проверяем, что в тело ответа возвращается список заказов.')
+    @allure.description('Запрашиваем список заказов')
     def test_get_order_list_successfull(self):
-        response = requests.get(Urls.order_list_url, headers={'Content-Type': 'text/plain'})
-        r = response.json()
-        assert response.status_code == 200 and r["orders"] != []
+        order = OrderAPI()
+        response = order.get_order_list()
+        assert response.status_code == 200 and response.json()["orders"] != []

@@ -1,14 +1,18 @@
+import pytest
+from urls import *
 import requests
 import random
 import string
 
-def register_new_courier_and_return_login_password():
+
+@pytest.fixture(scope="function")
+def courier():
     def generate_random_string(length):
         letters = string.ascii_lowercase
         random_string = ''.join(random.choice(letters) for i in range(length))
         return random_string
 
-    login_pass = []
+    data_courier = {}
 
     login = generate_random_string(10)
     password = generate_random_string(10)
@@ -23,10 +27,9 @@ def register_new_courier_and_return_login_password():
     response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', data=payload)
 
     if response.status_code == 201:
-        login_pass.append(login)
-        login_pass.append(password)
-        login_pass.append(first_name)
+        data_courier["login"]=login
+        data_courier["password"]=password
+        data_courier["first_name"]=first_name
 
-    return login_pass
+    return data_courier
 
-register_new_courier_and_return_login_password()
